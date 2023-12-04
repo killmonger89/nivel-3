@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: API de Valuación
+  version: 1.0.0
+paths:
+  /valuacion:
+    post:
+      summary: Realizar una valuación
+      requestBody:
+        content:
+          application/json:
+            example:
+              idMaterial: "001"
+              pesoGramos: 50
+      responses:
+        '200':
+          description: Valuación exitosa
+          content:
+            application/json:
+              example:
+                material: "001"
+                pesoGramos: 50
+                montoPrestamo: 60000.00

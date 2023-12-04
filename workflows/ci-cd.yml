@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+    steps:
+      - name: Deploy to Production
+        run: |
+           # Configurar Git para el despliegue
+          git config --global user.cenmrc@gmail.com "actions@github.com"
+          git config --global user.killmonger89 "GitHub Actions"
+
+          # Clonar el repositorio en el servidor de producción
+          git clone ssh://git@github.com:killmonger89/RetoTecnicoNiv2.git
+
+          # Copiar los archivos construidos al servidor de producción
+          rsync -avz --delete ./dist/ git@github.com:killmonger89/RetoTecnicoNiv2.git
+
+          # Instalar dependencias y reiniciar la aplicación en el servidor
+          ssh git@github.com:killmonger89/RetoTecnicoNiv2.git "cd D:\Escritorio\RetTecnicoOk && npm install && pm2 restart calcularPrestamo"
